@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sales-api
+  namespace: sales
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: sales-api }
+  template:
+    metadata:
+      labels: { app: sales-api }
+    spec:
+      containers:
+        - name: sales-api
+          image: REPLACE_WITH_ECR_IMAGE_URI
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet: { path: /actuator/health, port: 8080 }
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /actuator/health, port: 8080 }
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            requests: { cpu: 100m, memory: 256Mi }
+            limits: { cpu: 500m, memory: 512Mi }

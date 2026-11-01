@@ -1,0 +1,7 @@
+services:
+  sales-api:
+    build: .
+    image: saas-sales-application:local
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
